@@ -42,7 +42,7 @@ describe EMPessimistic::DeferrableChildProcess do
     cmd = "git ls-tree master:Gemfile"
     process = EMPessimistic::DeferrableChildProcess.open(cmd)
     process.errback do |data, status|
-      assert_match "fatal: not a tree object", data
+      assert_equal "fatal: not a tree object", data
       assert_equal 128, status.exitstatus
       done!
     end
