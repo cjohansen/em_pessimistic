@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "em_pessimistic"
 
-  s.add_dependency "eventmachine", "~>0.12"
+  s.add_dependency "eventmachine", "~>1.0"
 
   s.add_development_dependency "minitest", "~> 2.0"
   s.add_development_dependency "em-minitest-spec", "~> 1.1"
