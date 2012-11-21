@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require File.join("lib/em_pessimistic/version")
+require File.join("./lib/em_pessimistic/version")
 
 Gem::Specification.new do |s|
   s.name        = "em_pessimistic"
