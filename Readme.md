@@ -2,6 +2,10 @@
 
 *Pessimistic child processes for EventMachine.*
 
+<a href="http://travis-ci.org/cjohansen/em_pessimistic" class="travis">
+  <img src="https://secure.travis-ci.org/cjohansen/em_pessimistic.png">
+</a>
+
 EventMachine provides both `EM.popen` and `EM::DeferrableChildProcess`, but none
 of them are particularly useful in the case of your process exiting with an
 error.
