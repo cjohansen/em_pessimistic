@@ -35,6 +35,11 @@ module EMPessimistic
 
     def receive_data(data)
       @connection.receive_stderr(data)
+      close_connection
+    end
+
+    def unbind
+      @io.close
     end
   end
 
@@ -44,7 +49,10 @@ module EMPessimistic
     $stderr.reopen(wr)
     connection = EM.popen(*args)
     $stderr.reopen(new_stderr)
-    EM.attach(rd, Popen3StderrHandler, connection)
+    EM.attach(rd, Popen3StderrHandler, connection) do |c|
+      wr.close
+      new_stderr.close
+    end
     connection
   end
 end

@@ -1,10 +1,13 @@
-# EMPessimistic
+# EMPessimistic (GREAT THANKS TO AUTHOR: [Christian Johansen](https://github.com/cjohansen))
 
 *Pessimistic child processes for EventMachine.*
 
-<a href="http://travis-ci.org/cjohansen/em_pessimistic" class="travis">
-  <img src="https://secure.travis-ci.org/cjohansen/em_pessimistic.png">
-</a>
+THIS IMPLEMENTATION SOLVES "cjohansen/em_pessimistic" PROBLEM WITH "TOO MUCH FILE HANDLES OPENED" SYSTEM ERROR
+IN LONG RUNNING APPLICATIONS.
+IMPROVED:
+   - "new_stderr" and "wr" closed after descriptor is attached to process connnection.
+   - "close_connection" invokes strictly after data received.
+   - "@io.close" invokes strictly after unbind.
 
 EventMachine provides both `EM.popen` and `EM::DeferrableChildProcess`, but none
 of them are particularly useful in the case of your process exiting with an
@@ -54,37 +57,18 @@ Additionally, it sends data from the process' stderr to the handler's
 Works mostly like
 [`EM::DeferrableChildProcess`](http://eventmachine.rubyforge.org/EventMachine/DeferrableChildProcess.html).
 
-If the process spawned by `EMPessimistic::DeferrableChildProcess.open` exits
-cleanly, the returned deferrable will invoke the `callback` with two arguments -
-`data`, which is a string representing the process' stdout and `status`, which
-is a [`Process::Status`](http://www.ruby-doc.org/core-1.9.3/Process/Status.html)
-object.
+    # I suppose that EM has already been run.
 
-If the process spawned by `EMPessimistic::DeferrableChildProcess.open` exits
-with an error, the returned deferrable will invoke the `errback` with two
-arguments - `data`, which is a string representing the process' stderr and
-`status`, which is a
-[`Process::Status`](http://www.ruby-doc.org/core-1.9.3/Process/Status.html)
-object.
+    child = EMPessimistic::DeferrableChildProcess.open(command)
 
-    require "eventmachine"
-    require "em_pessimistic"
-
-    EM.run do
-      EM.next_tick do
-        git = EMPessimistic::DeferrableChildProcess.open("git ls-tree master:")
-
-        git.callback do |stdout, status|
-          puts "Success! Stdout:\n#{stdout}"
-          EM.stop
-        end
-
-        git.errback do |stderr, status|
-          puts "Failure (exit code #{status.exitstatus}). Stderr:\n#{stderr}"
-          EM.stop
-        end
-      end
+    child.callback do |data, err, status|
+      # Your code here...
     end
+
+    child.errback do |data, err, status|
+      # Your code here...
+    end
+
 
 ## Installing
 

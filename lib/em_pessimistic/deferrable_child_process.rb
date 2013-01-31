@@ -50,9 +50,9 @@ module EMPessimistic
     def unbind
       status = get_status
       if status.exitstatus != 0
-        fail(@stderr.join.strip, status)
+        fail(@stdout.join.strip, @stderr.join.strip, status)
       else
-        succeed(@stdout.join.strip, status)
+        succeed(@stdout.join.strip, @stderr.join.strip, status)
       end
     end
   end
