@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "minitest", "~> 2.0"
   s.add_development_dependency "em-minitest-spec", "~> 1.1"
   s.add_development_dependency "rake", "~> 0.9"
+  s.add_development_dependency "fosl", "~> 0.0.1"
 
   s.files         = `git ls-files -- lib/*`.split("\n")
   s.test_files    = `git ls-files -- test/*`.split("\n")

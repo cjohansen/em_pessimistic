@@ -30,8 +30,8 @@ describe EMPessimistic::DeferrableChildProcess do
 
   it "passes stdout data and status to callback on success" do
     process = EMPessimistic::DeferrableChildProcess.open("ls -l")
-    process.callback do |data, status|
-      assert_match /em_pessimistic\.gemspec/, data
+    process.callback do |stdout, stderr, status|
+      assert_match /em_pessimistic\.gemspec/, stdout
       assert_equal 0, status.exitstatus
       done!
     end
@@ -41,8 +41,8 @@ describe EMPessimistic::DeferrableChildProcess do
   it "passes stderr data and status to errback on error" do
     cmd = "git ls-tree master:Gemfile"
     process = EMPessimistic::DeferrableChildProcess.open(cmd)
-    process.errback do |data, status|
-      assert_equal "fatal: not a tree object", data
+    process.errback do |stderr, stdout, status|
+      assert_equal "fatal: not a tree object", stderr
       assert_equal 128, status.exitstatus
       done!
     end
