@@ -25,7 +25,6 @@
 require "test_helper"
 require 'fosl/parser'
 require "em_pessimistic/deferrable_child_process"
-require 'awesome_print'
 
 describe EMPessimistic::DeferrableChildProcess do
   include EM::MiniTest::Spec
