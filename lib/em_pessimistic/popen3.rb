@@ -35,11 +35,6 @@ module EMPessimistic
 
     def receive_data(data)
       @connection.receive_stderr(data)
-      close_connection
-    end
-
-    def unbind
-      @io.close
     end
   end
 
