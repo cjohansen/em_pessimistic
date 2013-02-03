@@ -110,8 +110,7 @@ pass before submitting your contribution.
 
 ### The MIT License (MIT)
 
-**Copyright (C) 2012 Gitorious AS**
-**Copyright (C) 2013 Andrey Chergik**
+**Copyright (C) 2012 Gitorious AS  and  2013 Andrey Chergik**
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
