@@ -4,8 +4,8 @@ require File.join("./lib/em_pessimistic/version")
 Gem::Specification.new do |s|
   s.name        = "em_pessimistic"
   s.version     = EMPessimistic::VERSION
-  s.authors     = ["Christian Johansen"]
-  s.email       = ["christian@gitorious.org"]
+  s.authors     = ["Christian Johansen", "Andrey Chergik"]
+  s.email       = ["christian@gitorious.org", "achergik@gmail.com"]
   s.homepage    = "http://gitorious.org/gitorious/em_pessimistic"
   s.summary     = %q{popen with stderr and DeferrableChildProcess with errback for EventMachine}
   s.description = %q{EventMachine's built-in popen does not provide access to stderr. Likewise, it's DeferrableChildProcess does not use an errback for when the process fails. This gem fixes both of those mistakes.}

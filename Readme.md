@@ -1,13 +1,10 @@
-# EMPessimistic (GREAT THANKS TO AUTHOR: [Christian Johansen](https://github.com/cjohansen))
+# EMPessimistic
 
 *Pessimistic child processes for EventMachine.*
 
-THIS IMPLEMENTATION SOLVES "cjohansen/em_pessimistic" PROBLEM WITH "TOO MUCH FILE HANDLES OPENED" SYSTEM ERROR
-IN LONG RUNNING APPLICATIONS.
-IMPROVED:
-   - "new_stderr" and "wr" closed after descriptor is attached to process connnection.
-   - "close_connection" invokes strictly after data received.
-   - "@io.close" invokes strictly after unbind.
+<a href="http://travis-ci.org/cjohansen/em_pessimistic" class="travis">
+  <img src="https://secure.travis-ci.org/cjohansen/em_pessimistic.png">
+</a>
 
 EventMachine provides both `EM.popen` and `EM::DeferrableChildProcess`, but none
 of them are particularly useful in the case of your process exiting with an
@@ -57,6 +54,18 @@ Additionally, it sends data from the process' stderr to the handler's
 Works mostly like
 [`EM::DeferrableChildProcess`](http://eventmachine.rubyforge.org/EventMachine/DeferrableChildProcess.html).
 
+If the process spawned by `EMPessimistic::DeferrableChildProcess.open` exits
+cleanly, the returned deferrable will invoke the `callback` with three arguments -
+`data`, which is a string representing the process' stdout, `error`, which is a string
+representing the process' stderr and `status`, which is a
+[`Process::Status`](http://www.ruby-doc.org/core-1.9.3/Process/Status.html) object.
+
+If the process spawned by `EMPessimistic::DeferrableChildProcess.open` exits
+with an error, the returned deferrable will invoke the `errback` with three
+arguments - `error`, which is a string representing the process' stderr`data`,
+which is a string representing the process' stderr and `status`, which is a
+[`Process::Status`](http://www.ruby-doc.org/core-1.9.3/Process/Status.html) object.
+
     # I suppose that EM has already been run.
 
     child = EMPessimistic::DeferrableChildProcess.open(command)
@@ -102,6 +111,7 @@ pass before submitting your contribution.
 ### The MIT License (MIT)
 
 **Copyright (C) 2012 Gitorious AS**
+**Copyright (C) 2013 Andrey Chergik**
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
