@@ -44,12 +44,13 @@ describe EMPessimistic::DeferrableChildProcess do
 
     EM.add_periodic_timer(1) do
 
-      data = Hash[parse.lsof("+p #{pid}")[pid].files.group_by { |f| f[:type] }.select { |k,v| /^(?:unix|PIPE)$/.match(k) }]
+      data = Hash[parse.lsof("+p #{pid}")[pid].files.group_by { |f| f[:type] }.select { |k,v| /^(?:unix|PIPE|FIFO)$/.match(k) }]
       if finished == amount
-        assert data["PIPE"], 'there are several PIPEs owned by this process'
+        pipe = data['PIPE'] || data['FIFO']
+        assert pipe, 'there are several PIPEs owned by this process'
 
         # One Pipe is for "lsof" process. Two others for EM loop.
-        assert_equal 3, data["PIPE"].length
+        assert_equal 3, pipe.length
         assert !data["unix"], 'all unix domain sockets for this process are closed'
         done!
       else
