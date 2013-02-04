@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    em_pessimistic (0.1.2)
+    em_pessimistic (0.2.0)
       eventmachine (~> 1.0)
 
 GEM
