@@ -26,7 +26,6 @@ require "test_helper"
 require 'fosl/parser'
 require "em_pessimistic/deferrable_child_process"
 
-
 describe EMPessimistic::DeferrableChildProcess do
   include EM::MiniTest::Spec
 
@@ -58,7 +57,7 @@ describe EMPessimistic::DeferrableChildProcess do
     default_pipes = _pipes?(default_data)
     default_unix = _unix?(default_data)
 
-    # Increase this amount to your ("system opened file descriptors limit" / 3) and you will meet "Errno::EMFILE: Too many open files" exception.
+    # Without patch applied increase this amount to your ("system opened file descriptors limit" / 3) and you will meet "Errno::EMFILE: Too many open files" exception.
     amount = 1
 
     EM.add_periodic_timer(1) do
