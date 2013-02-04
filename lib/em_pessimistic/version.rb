@@ -2,7 +2,7 @@
 # --
 # The MIT License (MIT)
 #
-# Copyright (C) 2012 Gitorious AS
+# Copyright (C) 2012-2013 Gitorious AS
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -24,5 +24,5 @@
 #++
 
 module EMPessimistic
-  VERSION = "0.1.2"
+  VERSION = "0.2.0"
 end
