@@ -3,6 +3,7 @@
 # The MIT License (MIT)
 #
 # Copyright (C) 2012 Gitorious AS
+# Copyright (C) 2013 Andrey Chergik
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -50,9 +51,9 @@ module EMPessimistic
     def unbind
       status = get_status
       if status.exitstatus != 0
-        fail(@stderr.join.strip, status)
+        fail(@stderr.join.strip, @stdout.join.strip, status)
       else
-        succeed(@stdout.join.strip, status)
+        succeed(@stdout.join.strip, @stderr.join.strip, status)
       end
     end
   end

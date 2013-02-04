@@ -2,7 +2,7 @@
 # --
 # The MIT License (MIT)
 #
-# Copyright (C) 2012 Gitorious AS
+# Copyright (C) 2013 Andrey Chergik
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,29 +23,55 @@
 # SOFTWARE.
 #++
 require "test_helper"
+require 'fosl/parser'
 require "em_pessimistic/deferrable_child_process"
 
 describe EMPessimistic::DeferrableChildProcess do
   include EM::MiniTest::Spec
 
-  it "passes stdout data and status to callback on success" do
-    process = EMPessimistic::DeferrableChildProcess.open("ls -l")
-    process.callback do |stdout, stderr, status|
-      assert_match /em_pessimistic\.gemspec/, stdout
-      assert_equal 0, status.exitstatus
-      done!
-    end
-    wait!
+  def timeout_interval
+   5
   end
 
-  it "passes stderr data and status to errback on error" do
-    cmd = "git ls-tree master:Gemfile"
-    process = EMPessimistic::DeferrableChildProcess.open(cmd)
-    process.errback do |stderr, stdout, status|
-      assert_equal "fatal: not a tree object", stderr
-      assert_equal 128, status.exitstatus
-      done!
+  it "has no dubious opened pipes and unix domain sockets after all child processes exited" do
+
+    parse = FOSL::Parser.new
+    pid = Process.pid
+    finished = 0
+
+    # Increase this amount to your ("system opened file descriptors limit" / 3) and you will meet "Errno::EMFILE: Too many open files" exception.
+    amount = 1
+
+    EM.add_periodic_timer(1) do
+
+      data = Hash[parse.lsof("+p #{pid}")[pid].files.group_by { |f| f[:type] }.select { |k,v| /^(?:unix|PIPE)$/.match(k) }]
+      if finished == amount
+        assert data["PIPE"], 'there are several PIPEs owned by this process'
+
+        # One Pipe is for "lsof" process. Two others for EM loop.
+        assert_equal 3, data["PIPE"].length
+        assert !data["unix"], 'all unix domain sockets for this process are closed'
+        done!
+      else
+        ap data
+      end
+
     end
+
+    amount.times do |i|
+      process = EMPessimistic::DeferrableChildProcess.open("ruby -v")
+
+      process.callback do |stdout, stderr, status|
+        finished += 1
+      end
+
+      process.errback do |stderr, stdout, status|
+        finished += 1
+      end
+    end
+
     wait!
+
   end
 end
+

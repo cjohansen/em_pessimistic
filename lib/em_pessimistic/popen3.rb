@@ -3,6 +3,7 @@
 # The MIT License (MIT)
 #
 # Copyright (C) 2012 Gitorious AS
+# Copyright (C) 2013 Andrey Chergik
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -44,7 +45,10 @@ module EMPessimistic
     $stderr.reopen(wr)
     connection = EM.popen(*args)
     $stderr.reopen(new_stderr)
-    EM.attach(rd, Popen3StderrHandler, connection)
+    EM.attach(rd, Popen3StderrHandler, connection) do |c|
+      wr.close
+      new_stderr.close
+    end
     connection
   end
 end
